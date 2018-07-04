@@ -6,12 +6,15 @@
   (s/map-of symbol? any?))
 
 (defmacro with-check-asserts
-  "Puts body in a block in which
-  (s/check-asserts?) is `true`."
-  [& body]
-  `(let [orig-val# (s/check-asserts?)]
+  "Puts body in a block inside which
+  (`s/check-asserts?`) returns flag."
+  [flag & body]
+  `(let [flag# ~flag
+         orig-val# (s/check-asserts?)]
      (try
-       (s/check-asserts true)
+       (assert (boolean? flag#)
+               "flag must be boolean!")
+       (s/check-asserts flag#)
        ~@body
        (finally
          (s/check-asserts orig-val#)))))
@@ -24,15 +27,15 @@
   before the body.
 
   NOTE: Asserts work only when
-  `(s/check-asserts?)` is `true`.
+  (`s/check-asserts?`) is true.
 
   Check out `with-check-asserts`."
   [sym-spec-map & body]
-  (with-check-asserts
+  (with-check-asserts true
     (s/assert ::sym-spec-map sym-spec-map)
     `(do
-       ~@(for [[arg spec] sym-spec-map]
-           `(s/assert ~spec ~arg))
+       ~@(for [[sym spec] sym-spec-map]
+           `(s/assert ~spec ~sym))
        ~@body)))
 
 
@@ -41,7 +44,7 @@
   resulting from the evaluation of body.
 
   NOTE: Asserts work only when
-  `(s/check-asserts?)` is `true`.
+  (`s/check-asserts?`) is true.
 
   Check out `with-check-asserts`."
   [spec & body]
@@ -54,7 +57,7 @@
   and `with-spec-out`.
 
   NOTE: Asserts work only when
-  `(s/check-asserts?)` is `true`.
+  (`s/check-asserts?`) is true.
 
   Check out `with-check-asserts`."
   [sym-spec-map ret-spec & body]
