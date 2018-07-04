@@ -2,28 +2,19 @@
   "Spec arbitrary Clojure expressions!"
   (:require [clojure.spec.alpha :as s]))
 
-;; Internals
-;; =========
-(defmacro with-spec-in*
-  "Use `with-spec-in` instead."
-  [sym-spec-map & body]
-  `(do
-     ~@(for [[arg spec] sym-spec-map]
-         `(s/assert ~spec ~arg))
-     ~@body))
-
 (s/def ::sym-spec-map
   (s/map-of symbol? any?))
 
-
-;; API
-;; ===
 (defmacro with-check-asserts
   "Puts body in a block in which
   (s/check-asserts?) is `true`."
   [& body]
-  `(with-bindings {s/check-asserts true}
-     ~@body))
+  `(let [orig-val# (s/check-asserts?)]
+     (try
+       (s/check-asserts true)
+       ~@body
+       (finally
+         (s/check-asserts orig-val#)))))
 
 
 (defmacro with-spec-in
@@ -38,9 +29,11 @@
   Check out `with-check-asserts`."
   [sym-spec-map & body]
   (with-check-asserts
-    (with-spec-in* {sym-spec-map ::sym-spec-map}
-      `(with-spec-in* sym-spec-map
-         ~@body))))
+    (s/assert ::sym-spec-map sym-spec-map)
+    `(do
+       ~@(for [[arg spec] sym-spec-map]
+           `(s/assert ~spec ~arg))
+       ~@body)))
 
 
 (defmacro with-spec-out
@@ -52,7 +45,8 @@
 
   Check out `with-check-asserts`."
   [spec & body]
-  `(s/assert ~spec ~@body))
+  `(let [res# ~(cons `do body)]
+     (s/assert ~spec res#)))
 
 
 (defmacro with-spec
