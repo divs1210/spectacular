@@ -80,6 +80,18 @@ or even entire functions:
     (palindrome? "pop")))
 ```
 
+## Note
+
+Get better error messages with [expound](https://github.com/bhb/expound).
+
+Add this to `src/user.clj`:
+
+```clojure
+(ns user)
+
+(set! clojure.spec.alpha/*explain-out* expound.alpha/printer)
+```
+
 ## License
 
 Copyright © 2018 Divyansh Prakash
