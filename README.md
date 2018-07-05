@@ -22,7 +22,6 @@ Specs are great! Let's have more of them.
 
 ```clojure
 (require '[clojure.spec.alpha :as s])
-(require '[spectacular.core :refer [with-check-asserts]])
 ```
 
 Specs will be checked **iff** `(s/check-asserts?)` evaluates to `true`.
@@ -32,6 +31,8 @@ This can be achieved in two ways:
 * `with-check-asserts` sets spec-checking on/off for its body:
 
 ```clojure
+(require '[spectacular.core :refer [with-check-asserts]])
+
 (with-check-asserts true
   (let [a 100
         b "2"]
@@ -66,9 +67,19 @@ or just the returned value:
       (str a b))))
 ```
 
+or even entire functions:
+
+```clojure
+(let [palindrome? (fn [s]
+                    (with-spec {s (s/and string? not-empty)}
+                      boolean?
+                      (= (seq s) (reverse s))))]
+  (with-check-asserts true
+    (palindrome? "pop")))
+```
+
 ## License
 
 Copyright © 2018 Divyansh Prakash
 
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+Distributed under the Eclipse Public License either version 1.0.
