@@ -20,6 +20,8 @@ Specs are great! Let's have more of them.
 
 ## Usage
 
+`[spectacular "0.1.0"]`
+
 ```clojure
 (require '[clojure.spec.alpha :as s])
 ```
