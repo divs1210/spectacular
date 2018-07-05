@@ -7,7 +7,8 @@
 
 (defmacro with-check-asserts
   "Puts body in a block inside which
-  (`s/check-asserts?`) returns flag."
+    (`s/check-asserts?`)
+  returns flag."
   [flag & body]
   `(let [flag# ~flag
          orig-val# (s/check-asserts?)]
@@ -21,15 +22,12 @@
 
 
 (defmacro with-spec-in
-  "Takes a map of bindings from
-  symbols to specs,
-  inserting respective spec-asserts
-  before the body.
+  "Takes a map of bindings from symbols to specs,
+  inserting respective spec-asserts before the body.
 
   NOTE: Asserts work only when
-  (`s/check-asserts?`) is true.
-
-  Check out `with-check-asserts`."
+    (`s/check-asserts?`)
+  is true. See `with-check-asserts`."
   [sym-spec-map & body]
   (with-check-asserts true
     (s/assert ::sym-spec-map sym-spec-map)
@@ -44,22 +42,19 @@
   resulting from the evaluation of body.
 
   NOTE: Asserts work only when
-  (`s/check-asserts?`) is true.
-
-  Check out `with-check-asserts`."
+    (`s/check-asserts?`)
+  is true. See `with-check-asserts`."
   [spec & body]
   `(let [res# ~(cons `do body)]
      (s/assert ~spec res#)))
 
 
 (defmacro with-spec
-  "Composite of `with-spec-in`
-  and `with-spec-out`.
+  "Composite of `with-spec-in` and `with-spec-out`.
 
   NOTE: Asserts work only when
-  (`s/check-asserts?`) is true.
-
-  Check out `with-check-asserts`."
+    (`s/check-asserts?`)
+  is true. See `with-check-asserts`."
   [sym-spec-map ret-spec & body]
   `(with-spec-in ~sym-spec-map
      (with-spec-out ~ret-spec
