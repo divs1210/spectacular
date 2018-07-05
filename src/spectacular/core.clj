@@ -10,11 +10,13 @@
     (`s/check-asserts?`)
   returns flag."
   [flag & body]
+  (assert (boolean? flag)
+          "flag must be boolean!")
+  (assert (not-empty body)
+          "body cannot be empty!")
   `(let [flag# ~flag
          orig-val# (s/check-asserts?)]
      (try
-       (assert (boolean? flag#)
-               "flag must be boolean!")
        (s/check-asserts flag#)
        ~@body
        (finally
@@ -45,8 +47,10 @@
     (`s/check-asserts?`)
   is true. See `with-check-asserts`."
   [spec & body]
-  `(let [res# ~(cons `do body)]
-     (s/assert ~spec res#)))
+  (with-check-asserts true
+    (s/assert not-empty body)
+    `(let [res# ~(cons `do body)]
+       (s/assert ~spec res#))))
 
 
 (defmacro with-spec
