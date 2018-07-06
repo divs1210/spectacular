@@ -1,6 +1,6 @@
 # spectacular
 
-Spec arbitrary Clojure expressions!
+spec / instrument arbitrary Clojure expressions!
 
 ```clojure
 (require '[spectacular.core :refer [with-spec]])
