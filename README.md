@@ -84,12 +84,9 @@ or even entire functions:
 
 Get better error messages with [expound](https://github.com/bhb/expound).
 
-Add this to `src/user.clj`:
-
 ```clojure
-(ns user
-  (:require [clojure.spec.alpha :as s]
-            [expound.alpha :as e]))
+(require [clojure.spec.alpha :as s])
+(require [expound.alpha :as e])
 
 (set! s/*explain-out* e/printer)
 ```
