@@ -20,7 +20,7 @@ Specs are great! Let's have more of them.
 
 ## Usage
 
-`[spectacular "0.1.1"]`
+`[spectacular "0.1.2"]`
 
 ```clojure
 (require '[spectacular.core :as s])

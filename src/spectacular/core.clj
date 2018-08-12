@@ -3,7 +3,7 @@
   (:require [clojure.spec.alpha :as s]))
 
 (defonce ^:dynamic *check-spec-asserts*
-  true)
+  false)
 
 (defn check-asserts? []
   *check-spec-asserts*)
