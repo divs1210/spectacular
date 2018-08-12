@@ -20,26 +20,24 @@ Specs are great! Let's have more of them.
 
 ## Usage
 
-`[spectacular "0.1.0"]`
+`[spectacular "0.1.1"]`
 
 ```clojure
-(require '[clojure.spec.alpha :as s])
+(require '[spectacular.core :as s])
 ```
 
-Specs will be checked **iff** `(s/check-asserts?)` evaluates to `true`.
+Specs will be checked **iff** `(s/check-asserts?)` evaluates to `true`, which it doesn't by default.
 
 This can be achieved in two ways:
 * `(s/check-asserts true)` enables all spec asserts globally
-* `with-check-asserts` sets spec-checking on/off for its body:
+* `s/with-check-asserts` sets spec-checking on/off for its body:
 
 ```clojure
-(require '[spectacular.core :refer [with-check-asserts]])
-
-(with-check-asserts true
+(s/with-check-asserts true
   (let [a 100
         b "2"]
-    (with-spec {a integer?
-                b string?}
+    (s/with-spec {a integer?
+                  b string?}
       string?
       (str a b))))
 ```
@@ -47,36 +45,34 @@ This can be achieved in two ways:
 We can just check existing bindings:
 
 ```clojure
-(require '[spectacular.core :refer [with-spec-in]])
-
-(with-check-asserts true
+(s/with-check-asserts true
   (let [a 100
         b "2"]
-    (with-spec-in {a integer?
-                   b string?}
+    (s/with-spec-in {a integer?
+                     b string?}
       (str a b))))
 ```
 
 or just the returned value:
 
 ```clojure
-(require '[spectacular.core :refer [with-spec-out]])
-
-(with-check-asserts true
+(s/with-check-asserts true
   (let [a 100
         b "2"]
-    (with-spec-out string?
+    (s/with-spec-out string?
       (str a b))))
 ```
 
 or even entire functions:
 
 ```clojure
+(require '[clojure.spec.alpha :as sa])
+
 (let [palindrome? (fn [s]
-                    (with-spec {s (s/and string? not-empty)}
+                    (s/with-spec {s (sa/and string? not-empty)}
                       boolean?
                       (= (seq s) (reverse s))))]
-  (with-check-asserts true
+  (s/with-check-asserts true
     (palindrome? "pop")))
 ```
 

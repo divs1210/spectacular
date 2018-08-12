@@ -1,27 +1,26 @@
 (ns spectacular.core-test
   (:require [clojure.test :refer :all]
             [spectacular.core :refer :all]
-            [clojure.spec.alpha :as s]
             [clojure.string :as str]))
 
 (deftest with-check-asserts-test
-  (let [orig (s/check-asserts?)]
+  (let [orig (check-asserts?)]
     (try
       (testing "with initial value: false"
-        (s/check-asserts false)
+        (check-asserts false)
         (is (thrown? Exception
                      (with-check-asserts true
-                       (s/assert integer? "1"))))
-        (is (false? (s/check-asserts?))))
+                       (spec-assert integer? "1"))))
+        (is (false? (check-asserts?))))
 
       (testing "with initial value: true"
-        (s/check-asserts true)
+        (check-asserts true)
         (is (= "1"
                (with-check-asserts false
-                 (s/assert integer? "1"))))
-        (is (true? (s/check-asserts?))))
+                 (spec-assert integer? "1"))))
+        (is (true? (check-asserts?))))
       (finally
-        (s/check-asserts orig)))))
+        (check-asserts orig)))))
 
 
 (deftest with-spec-in-test
