@@ -5,14 +5,25 @@
 (defonce ^:dynamic *check-spec-asserts*
   false)
 
-(defn check-asserts? []
+(defn check-asserts?
+  "Returns true if spec-asserts are enabled."
+  []
   *check-spec-asserts*)
 
-(defn check-asserts [flag]
+(defn check-asserts
+  "Enables/disables spec-asserts.
+  Takes a boolean value."
+  [flag]
+  (assert (boolean? flag))
   (alter-var-root #'*check-spec-asserts*
                   (constantly flag)))
 
-(defmacro spec-assert [spec x]
+(defmacro spec-assert
+  "If (`check-asserts?`) returns true,
+  checks whether x conforms to spec,
+  and throws an error if it doesn't.
+  Returns x."
+  [spec x]
   `(let [x# ~x]
      (when *check-spec-asserts*
        (s/assert* ~spec x#))
@@ -20,7 +31,7 @@
 
 (defmacro with-check-asserts
   "Puts body in a block inside which
-    (`s/check-asserts?`)
+    (`check-asserts?`)
   returns flag."
   [flag & body]
   (assert (boolean? flag)
@@ -39,7 +50,7 @@
   inserting respective spec-asserts before the body.
 
   NOTE: Asserts work only when
-    (`s/check-asserts?`)
+    (`check-asserts?`)
   is true. See `with-check-asserts`."
   [sym-spec-map & body]
   (with-check-asserts true
@@ -54,7 +65,7 @@
   resulting from the evaluation of body.
 
   NOTE: Asserts work only when
-    (`s/check-asserts?`)
+    (`check-asserts?`)
   is true. See `with-check-asserts`."
   [spec & body]
   (with-check-asserts true
@@ -66,7 +77,7 @@
   "Composite of `with-spec-in` and `with-spec-out`.
 
   NOTE: Asserts work only when
-    (`s/check-asserts?`)
+    (`check-asserts?`)
   is true. See `with-check-asserts`."
   [sym-spec-map ret-spec & body]
   `(with-spec-in ~sym-spec-map

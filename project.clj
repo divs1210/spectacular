@@ -1,4 +1,4 @@
-(defproject spectacular "0.1.2"
+(defproject spectacular "0.2.0"
   :description "Spec arbitrary Clojure expressions!"
   :url "http://github.com/divs1210/spectacular"
   :license {:name "Eclipse Public License"

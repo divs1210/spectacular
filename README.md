@@ -20,7 +20,7 @@ Specs are great! Let's have more of them.
 
 ## Usage
 
-`[spectacular "0.1.2"]`
+`[spectacular "0.2.0"]`
 
 ```clojure
 (require '[spectacular.core :as s])
@@ -81,10 +81,9 @@ or even entire functions:
 Get better error messages with [expound](https://github.com/bhb/expound).
 
 ```clojure
-(require [clojure.spec.alpha :as s])
 (require [expound.alpha :as e])
 
-(set! s/*explain-out* e/printer)
+(set! sa/*explain-out* e/printer)
 ```
 
 ## License
